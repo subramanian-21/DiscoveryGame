@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -r  INPUT_MOVIES_PATH="/Users/subramani-22949/Applications/shell-scripts/movies.txt"
+declare -r  INPUT_MOVIES_PATH="/Users/subramani-22949/Applications/shell-scripts/discovery/movies.txt"
 declare -i NO_OF_LINES=$(wc "$INPUT_MOVIES_PATH" | awk '{ print $1 }')
 echo "Total Number of movies : $NO_OF_LINES"
 declare -r RANDOM_NUMBER=$((RANDOM % NO_OF_LINES + 1 ))
@@ -33,14 +33,32 @@ playChance(){
 printBoard(){
 	len="${#strSeq}"
 	
-	for j in $(seq 1 "$MOVIE_LENGTH") 
+	for j in $(seq 0 $((MOVIE_LENGTH-1)))
 	do
-		for ((k=0;k<))
+		isFound=0
+		for ((a=0;a<len;a++)) 
+		do
+			if [ "${MOVIE_NAME:j:1}" == "${strSeq:a:1}" ];
+			then
+				isFound="1"
+				break
+			fi
+		done
+
+		if [ "$isFound" -eq "1" ]
+		then 
+			printf " ${MOVIE_NAME:j:1} "
+		else 
+			printf " _ "
+		fi			
 	done
+	echo
 }
 
 for i in $(seq "1" "$chances")
 do 
+	echo "**$((chances - j - 1))Chances left**"
+	printBoard
 	playChance
 	echo "$strSeq"
 done
