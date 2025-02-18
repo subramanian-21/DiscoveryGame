@@ -32,14 +32,18 @@ playChance(){
 
 printBoard(){
 	len="${#strSeq}"
-	
+	gotVal=0
 	for j in $(seq 0 $((MOVIE_LENGTH-1)))
 	do
 		isFound=0
 		for ((a=0;a<len;a++)) 
 		do
+
 			if [ "${MOVIE_NAME:j:1}" == "${strSeq:a:1}" ];
 			then
+				if [ "$a" -eq $((len - 1)) ]; then
+    				gotVal="1"
+				fi
 				isFound="1"
 				break
 			fi
@@ -52,12 +56,15 @@ printBoard(){
 			printf " _ "
 		fi			
 	done
+	if [ "$gotVal" -eq 0 ]; then
+	chances=$((chances - 1))
+	fi
 	echo
 }
 
-for i in $(seq "1" "$chances")
+while [ "$chances" -gt 0 ]
 do 
-	echo "**$((chances - j - 1))Chances left**"
+	echo "**$chances Chances left**"
 	printBoard
 	playChance
 	echo "$strSeq"
