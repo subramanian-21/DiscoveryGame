@@ -7,7 +7,7 @@ declare -r RANDOM_NUMBER=$((RANDOM % NO_OF_LINES + 1 ))
 MOVIE=$(sed -n "${RANDOM_NUMBER}p" "$INPUT_MOVIES_PATH")
 declare -r MOVIE_NAME=$( echo "$MOVIE" | awk -F ' - ' '{ print $1 }')
 declare -r MOVIE_DESC=$( echo "$MOVIE" | awk -F ' - ' '{ print $2 }')
-echo "$MOVIE_NAME - $MOVIE_DESC"
+echo "Hint - $MOVIE_DESC"
 chances=5
 MOVIE_LENGTH="${#MOVIE_NAME}"
 strSeq=""
@@ -33,6 +33,7 @@ playChance(){
 printBoard(){
 	len="${#strSeq}"
 	gotVal=0
+	count=0
 	for j in $(seq 0 $((MOVIE_LENGTH-1)))
 	do
 		isFound=0
@@ -51,6 +52,7 @@ printBoard(){
 
 		if [ "$isFound" -eq "1" ]
 		then 
+			count=$((count+1))
 			printf " ${MOVIE_NAME:j:1} "
 		else 
 			printf " _ "
@@ -60,6 +62,10 @@ printBoard(){
 	chances=$((chances - 1))
 	fi
 	echo
+	if [ "$count" -eq "$MOVIE_LENGTH" ];then 
+	echo "YOU WIN"
+	chances=-1
+	fi
 }
 
 while [ "$chances" -gt 0 ]
